@@ -1,0 +1,35 @@
+**Symfony version(s) affected**: 4.2.6 - 4.2.8 (latest)
+
+**Description**
+This commit has introduced a BC break: [line 662 in RecursiveContextualValidator.php](https://github.com/symfony/validator/commit/c49ae8fe966395c362804a0264cbe5575a4921e5#diff-108b958298c8f2fcc35f02023cf7d942L662)
+
+If you explicitly pass validation group to the `Valid` constraint then the underlying property will never get validated since `CascadingStrategy::CASCADE` strategy is only applied if `Valid` constraint has no groups. Check [line 128 in GenericMetadata.php](https://github.com/symfony/validator/blob/v4.2.8/Mapping/GenericMetadata.php#L128)
+
+**How to reproduce**
+
+This test should not fail.
+
+```
+class CascadeTest extends RecursiveValidatorTest
+{
+    public function testCascade(): void
+    {
+        $entity = new Entity();
+        $entity->reference = new Reference();
+
+        $this->metadata->addPropertyConstraint('reference', new Valid(['groups' => ['Group']]));
+
+        $this->referenceMetadata->addPropertyConstraint('value', new NotBlank());
+
+        $violations = $this->validate($entity, null, 'Group');
+
+        $this->assertCount(1, $violations);
+    }
+}
+```
+
+**Possible Solution**
+<!--- Optional: only if you have suggestions on a fix/reason for the bug -->
+
+**Additional context**
+<!-- Optional: any other context about the problem: log messages, screenshots, etc. -->
