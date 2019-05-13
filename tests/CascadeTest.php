@@ -20,7 +20,7 @@ class CascadeTest extends RecursiveValidatorTest
 
         $this->metadata->addPropertyConstraint('reference', new Valid(['groups' => ['Group']]));
 
-        $this->referenceMetadata->addPropertyConstraint('value', new NotBlank());
+        $this->referenceMetadata->addPropertyConstraint('value', new NotBlank(['groups' => ['Group']]));
 
         $violations = $this->validate($entity, null, 'Group');
 
