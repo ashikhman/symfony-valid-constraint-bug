@@ -1,12 +1,10 @@
 **Passed tests on 4.2.5:**
 
-    cd /app && \
     composer require symfony/validator:4.2.5 && \
     php vendor/bin/phpunit
     
 **Failed tests on >=4.2.6:**
 
-    cd /app && \
     composer require symfony/validator:4.2.8 && \
     php vendor/bin/phpunit
     
